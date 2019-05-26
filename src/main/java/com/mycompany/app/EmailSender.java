@@ -1,17 +1,19 @@
 package com.mycompany.app;
 
+import org.apache.log4j.Logger;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 
 public class EmailSender {
 
+    private final static org.apache.log4j.Logger logger = Logger.getLogger(EmailSender.class);
 
+    private final static String EMAILTO = "spekulents@gmail.com";
 
     private String EmailPassword;
 
@@ -20,6 +22,7 @@ public class EmailSender {
     }
 
     public void sendEmail(JobPosition jobPosition) {
+
 
         //Setting up configurations for the email connection to the Google SMTP server using TLS
         Properties props = new Properties();
@@ -42,32 +45,25 @@ public class EmailSender {
 
             //Creating a Message object to set the email content
             MimeMessage msg = new MimeMessage(session);
-            //Storing the comma seperated values to email addresses
-            String to = "spekulents@gmail.com";
+
             /*Parsing the String with defualt delimiter as a comma by marking the boolean as true and storing the email
             addresses in an array of InternetAddress objects*/
-            InternetAddress[] address = InternetAddress.parse(to, true);
+            InternetAddress[] address = InternetAddress.parse(EMAILTO, true);
             //Setting the recepients from the address variable
             msg.setRecipients(Message.RecipientType.TO, address);
-            String timeStamp = new SimpleDateFormat("yyyymmdd_hh-mm-ss").format(new Date());
             msg.setSubject(jobPosition.getJobTitle());
             msg.setSentDate(new Date());
 
-            msg.setText("Hi, I hope you have a nice day \n"
-                    + "Please check new cool position available to you - " + jobPosition.getHyperLink());
-
+            String message = "Hi, I hope you have a nice day \n"
+                    + "Please check new cool position available to you - " + jobPosition.getHyperLink();
+            msg.setText(message);
             msg.setHeader("XPriority", "1");
-
             Transport.send(msg);
 
-            System.out.println("Mail has been sent successfully");
+            logger.info("sending Email to - " + EMAILTO + " message body - " + message);
 
         } catch (MessagingException mex) {
-
-            System.out.println("Unable to send an email" + mex);
-
+            logger.error("failed to send Email to - " + EMAILTO + " using information form, " + jobPosition.toString());
         }
-
     }
-
 }

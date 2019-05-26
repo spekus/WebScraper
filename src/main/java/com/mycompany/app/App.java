@@ -58,7 +58,7 @@ public class App {
         jobPosition.setHyperLink(JobHyperLink.getHrefAttribute());
         jobPosition.setJobTitle(jobTitle.asText());
 
-        logger.error("Returning job posting  -  "  + jobPosition.toString());
+        logger.info("Returning job posting  -  "  + jobPosition.toString());
         return jobPosition;
     }
 
