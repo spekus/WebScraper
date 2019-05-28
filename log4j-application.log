@@ -1,0 +1,48 @@
+2019-05-28 09:20:45 ERROR DataScaner:38 - scanForChanges is bein run
+2019-05-28 09:21:16 ERROR DataScaner:38 - scanForChanges is bein run
+2019-05-28 09:22:07 ERROR DataScaner:38 - scanForChanges is bein run
+2019-05-28 09:22:10 INFO  DataScaner:62 - Making job posting from htmlElement -  HtmlDivision[<div class="posting" data-qa-posting-id="9b67296c-fe5d-4a03-84cd-be97e6bdd10d">]
+2019-05-28 09:22:10 INFO  DataScaner:72 - Returning job posting  -  JobPosition(hyperLink=https://jobs.lever.co/vinted/9b67296c-fe5d-4a03-84cd-be97e6bdd10d, jobTitle=Backend Software Engineer)
+2019-05-28 09:22:10 INFO  DataScaner:62 - Making job posting from htmlElement -  HtmlDivision[<div class="posting" data-qa-posting-id="aaf600cc-cddd-4f7f-971a-bf82c3c01a11">]
+2019-05-28 09:22:10 INFO  DataScaner:72 - Returning job posting  -  JobPosition(hyperLink=https://jobs.lever.co/vinted/aaf600cc-cddd-4f7f-971a-bf82c3c01a11, jobTitle=Data Center Infrastructure Administrator)
+2019-05-28 09:22:10 INFO  DataScaner:62 - Making job posting from htmlElement -  HtmlDivision[<div class="posting" data-qa-posting-id="fa72e832-db4e-4b4d-85bc-c7b1843d9b73">]
+2019-05-28 09:22:10 INFO  DataScaner:72 - Returning job posting  -  JobPosition(hyperLink=https://jobs.lever.co/vinted/fa72e832-db4e-4b4d-85bc-c7b1843d9b73, jobTitle=Data Platform Engineer)
+2019-05-28 09:22:10 INFO  DataScaner:62 - Making job posting from htmlElement -  HtmlDivision[<div class="posting" data-qa-posting-id="5093eb62-9821-4e8c-92e3-dae67dbcf0fe">]
+2019-05-28 09:22:10 INFO  DataScaner:72 - Returning job posting  -  JobPosition(hyperLink=https://jobs.lever.co/vinted/5093eb62-9821-4e8c-92e3-dae67dbcf0fe, jobTitle=Director of Engineering (Product))
+2019-05-28 09:22:10 INFO  DataScaner:62 - Making job posting from htmlElement -  HtmlDivision[<div class="posting" data-qa-posting-id="4a250e76-7aca-499f-883a-d6b5cc7e497a">]
+2019-05-28 09:22:10 INFO  DataScaner:72 - Returning job posting  -  JobPosition(hyperLink=https://jobs.lever.co/vinted/4a250e76-7aca-499f-883a-d6b5cc7e497a, jobTitle=Engineering Intern: Vinted Summer Academy)
+2019-05-28 09:22:10 INFO  DataScaner:62 - Making job posting from htmlElement -  HtmlDivision[<div class="posting" data-qa-posting-id="d2e5dc6d-2ca4-44a5-a823-12e0b5f3f135">]
+2019-05-28 09:22:10 INFO  DataScaner:72 - Returning job posting  -  JobPosition(hyperLink=https://jobs.lever.co/vinted/d2e5dc6d-2ca4-44a5-a823-12e0b5f3f135, jobTitle=iOS Software Engineer)
+2019-05-28 09:22:10 INFO  DataScaner:62 - Making job posting from htmlElement -  HtmlDivision[<div class="posting" data-qa-posting-id="c63315f5-fa6a-41c5-8247-c15fb201484a">]
+2019-05-28 09:22:10 INFO  DataScaner:72 - Returning job posting  -  JobPosition(hyperLink=https://jobs.lever.co/vinted/c63315f5-fa6a-41c5-8247-c15fb201484a, jobTitle=Machine Learning Engineer)
+2019-05-28 09:22:10 INFO  DataScaner:62 - Making job posting from htmlElement -  HtmlDivision[<div class="posting" data-qa-posting-id="6cd6458f-ec42-4d8a-aff7-2878d1704b29">]
+2019-05-28 09:22:10 INFO  DataScaner:72 - Returning job posting  -  JobPosition(hyperLink=https://jobs.lever.co/vinted/6cd6458f-ec42-4d8a-aff7-2878d1704b29, jobTitle=Site Reliability Engineer)
+2019-05-28 09:22:10 INFO  DataScaner:62 - Making job posting from htmlElement -  HtmlDivision[<div class="posting" data-qa-posting-id="039d6c9f-562b-47f5-9481-dd3946fb71a3">]
+2019-05-28 09:22:10 INFO  DataScaner:72 - Returning job posting  -  JobPosition(hyperLink=https://jobs.lever.co/vinted/039d6c9f-562b-47f5-9481-dd3946fb71a3, jobTitle=Software Engineer & Team Lead)
+2019-05-28 09:22:10 ERROR EmailSender:26 - sendEmail is being run
+2019-05-28 09:22:11 INFO  EmailSender:64 - sending Email to - spekulents@gmail.com message body - Hi, I hope you have a nice day 
+Please check new cool position available to you - https://jobs.lever.co/vinted/9b67296c-fe5d-4a03-84cd-be97e6bdd10d
+2019-05-28 09:22:11 ERROR EmailSender:26 - sendEmail is being run
+2019-05-28 09:22:13 INFO  EmailSender:64 - sending Email to - spekulents@gmail.com message body - Hi, I hope you have a nice day 
+Please check new cool position available to you - https://jobs.lever.co/vinted/aaf600cc-cddd-4f7f-971a-bf82c3c01a11
+2019-05-28 09:22:13 ERROR EmailSender:26 - sendEmail is being run
+2019-05-28 09:22:14 INFO  EmailSender:64 - sending Email to - spekulents@gmail.com message body - Hi, I hope you have a nice day 
+Please check new cool position available to you - https://jobs.lever.co/vinted/fa72e832-db4e-4b4d-85bc-c7b1843d9b73
+2019-05-28 09:22:14 ERROR EmailSender:26 - sendEmail is being run
+2019-05-28 09:22:15 INFO  EmailSender:64 - sending Email to - spekulents@gmail.com message body - Hi, I hope you have a nice day 
+Please check new cool position available to you - https://jobs.lever.co/vinted/5093eb62-9821-4e8c-92e3-dae67dbcf0fe
+2019-05-28 09:22:15 ERROR EmailSender:26 - sendEmail is being run
+2019-05-28 09:22:16 INFO  EmailSender:64 - sending Email to - spekulents@gmail.com message body - Hi, I hope you have a nice day 
+Please check new cool position available to you - https://jobs.lever.co/vinted/4a250e76-7aca-499f-883a-d6b5cc7e497a
+2019-05-28 09:22:16 ERROR EmailSender:26 - sendEmail is being run
+2019-05-28 09:22:17 INFO  EmailSender:64 - sending Email to - spekulents@gmail.com message body - Hi, I hope you have a nice day 
+Please check new cool position available to you - https://jobs.lever.co/vinted/d2e5dc6d-2ca4-44a5-a823-12e0b5f3f135
+2019-05-28 09:22:17 ERROR EmailSender:26 - sendEmail is being run
+2019-05-28 09:22:18 INFO  EmailSender:64 - sending Email to - spekulents@gmail.com message body - Hi, I hope you have a nice day 
+Please check new cool position available to you - https://jobs.lever.co/vinted/c63315f5-fa6a-41c5-8247-c15fb201484a
+2019-05-28 09:22:18 ERROR EmailSender:26 - sendEmail is being run
+2019-05-28 09:22:20 INFO  EmailSender:64 - sending Email to - spekulents@gmail.com message body - Hi, I hope you have a nice day 
+Please check new cool position available to you - https://jobs.lever.co/vinted/6cd6458f-ec42-4d8a-aff7-2878d1704b29
+2019-05-28 09:22:20 ERROR EmailSender:26 - sendEmail is being run
+2019-05-28 09:22:21 INFO  EmailSender:64 - sending Email to - spekulents@gmail.com message body - Hi, I hope you have a nice day 
+Please check new cool position available to you - https://jobs.lever.co/vinted/039d6c9f-562b-47f5-9481-dd3946fb71a3

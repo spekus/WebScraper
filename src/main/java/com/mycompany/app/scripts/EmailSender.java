@@ -1,5 +1,6 @@
-package com.mycompany.app;
+package com.mycompany.app.scripts;
 
+import com.mycompany.app.data.JobPosition;
 import org.apache.log4j.Logger;
 
 import javax.mail.*;
@@ -23,6 +24,7 @@ public class EmailSender {
 
     public void sendEmail(JobPosition jobPosition) {
 
+        logger.info("sendEmail is being run");
 
         //Setting up configurations for the email connection to the Google SMTP server using TLS
         Properties props = new Properties();

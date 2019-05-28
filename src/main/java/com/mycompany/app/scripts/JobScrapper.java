@@ -1,4 +1,4 @@
-package com.mycompany.app;
+package com.mycompany.app.scripts;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -9,7 +9,10 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.mycompany.app.data.JobPosition;
+import com.mycompany.app.data.Properties;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,21 +21,29 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class App {
 
-    final static Logger logger = Logger.getLogger(App.class);
+@Service
+public class JobScrapper {
 
-    public static void main(String[] args) throws IOException {
+    final static Logger logger = Logger.getLogger(JobScrapper.class);
 
-        String homePage = args[0];
-        String emailPassword = args[1];
-        File file = new File("Job_Postings.json");
+    static Properties properties = null;
+
+
+    public JobScrapper(Properties properties) {
+        this.properties = properties;
+    }
+
+    public void scanForChanges() throws IOException {
+        logger.info("scanForChanges is bein run");
+
+        File file = new File(properties.getFilename());
         final WebClient client = configureClient();
         Collection<JobPosition> alreadySavedJobPostings = returnSavedJobPostings(file);
 
-        HtmlPage page = client.getPage(homePage);
+        HtmlPage page = client.getPage(properties.getAddress());
         List<HtmlElement> jobPostings = (List<HtmlElement>) page.getByXPath("//div[@class='posting']");
-        EmailSender emailSender = new EmailSender(emailPassword);
+        EmailSender emailSender = new EmailSender(properties.getPassword());
 
         List<JobPosition> newJobPostings = jobPostings.stream()
                 .map(htmlElement -> makeJobPosting(htmlElement))
@@ -47,7 +58,7 @@ public class App {
 
     }
 
-    private static JobPosition makeJobPosting(HtmlElement htmlElement) {
+    private JobPosition makeJobPosting(HtmlElement htmlElement) {
         logger.info("Making job posting from htmlElement -  "  + htmlElement);
 
         HtmlAnchor JobHyperLink = htmlElement.getFirstByXPath(".//div[@class='posting-apply']/a");
@@ -63,20 +74,20 @@ public class App {
     }
 
 
-    private static void writeToJSON(File file, Collection<JobPosition> currentPositions) throws IOException {
+    private void writeToJSON(File file, Collection<JobPosition> currentPositions) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
         writer.writeValue(file, currentPositions);
     }
 
-    private static WebClient configureClient() {
+    private WebClient configureClient() {
         WebClient client = new WebClient(BrowserVersion.FIREFOX_38);
         client.getOptions().setCssEnabled(false);
         client.getOptions().setJavaScriptEnabled(false);
         return client;
     }
 
-    private static Collection<JobPosition> returnSavedJobPostings(File json) throws IOException {
+    private Collection<JobPosition> returnSavedJobPostings(File json) throws IOException {
         Collection<JobPosition> jobPositions = new HashSet<>();
         if (json.exists()) {
             ObjectMapper mapper = new ObjectMapper();
