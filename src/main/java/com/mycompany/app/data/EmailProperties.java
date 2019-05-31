@@ -7,10 +7,12 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @Configuration
 @ConfigurationProperties("spedlite.email")
-public class Properties {
+public class EmailProperties {
 
     private String address;
+    private String sourceEmailAddress;
     private String password;
+    private String targetEmailAddress;
     private String filename;
 
 }

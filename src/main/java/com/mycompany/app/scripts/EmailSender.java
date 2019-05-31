@@ -1,7 +1,9 @@
 package com.mycompany.app.scripts;
 
+import com.mycompany.app.data.EmailProperties;
 import com.mycompany.app.data.JobPosition;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -9,17 +11,15 @@ import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.Properties;
 
-
+@Service
 public class EmailSender {
 
     private final static org.apache.log4j.Logger logger = Logger.getLogger(EmailSender.class);
 
-    private final static String EMAILTO = "spekulents@gmail.com";
+    private EmailProperties properties;
 
-    private String EmailPassword;
-
-    public EmailSender(String EmailPassword) {
-        this.EmailPassword = EmailPassword;
+    public EmailSender(EmailProperties properties) {
+        this.properties = properties;
     }
 
     public void sendEmail(JobPosition jobPosition) {
@@ -34,38 +34,34 @@ public class EmailSender {
         props.put("mail.smtp.port", "587");
         props.put("mail.smtp.auth", "true");
 
-        //Establishing a session with required user details
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("spekulents@gmail.com", EmailPassword);
+                return new PasswordAuthentication(properties.getSourceEmailAddress(), properties.getPassword());
             }
 
         });
 
         try {
 
-            //Creating a Message object to set the email content
             MimeMessage msg = new MimeMessage(session);
 
-            /*Parsing the String with defualt delimiter as a comma by marking the boolean as true and storing the email
-            addresses in an array of InternetAddress objects*/
-            InternetAddress[] address = InternetAddress.parse(EMAILTO, true);
-            //Setting the recepients from the address variable
+            InternetAddress[] address = InternetAddress.parse(properties.getTargetEmailAddress(), true);
+
             msg.setRecipients(Message.RecipientType.TO, address);
             msg.setSubject(jobPosition.getJobTitle());
             msg.setSentDate(new Date());
 
-            String message = "Hi, I hope you have a nice day \n"
+            String emailText = "Hi, I hope you have a nice day \n"
                     + "Please check new cool position available to you - " + jobPosition.getHyperLink();
-            msg.setText(message);
+            msg.setText(emailText);
             msg.setHeader("XPriority", "1");
             Transport.send(msg);
 
-            logger.info("sending Email to - " + EMAILTO + " message body - " + message);
+            logger.info("sending Email to - " + properties.getTargetEmailAddress() + " message body - " + emailText);
 
         } catch (MessagingException mex) {
-            logger.error("failed to send Email to - " + EMAILTO + " using information form, " + jobPosition.toString());
+            logger.error("failed to send Email to - " + properties.getTargetEmailAddress() + " using information form, " + jobPosition.toString());
         }
     }
 }

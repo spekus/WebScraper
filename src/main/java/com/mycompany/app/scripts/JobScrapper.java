@@ -10,7 +10,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.mycompany.app.data.JobPosition;
-import com.mycompany.app.data.Properties;
+import com.mycompany.app.data.EmailProperties;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -27,32 +27,34 @@ public class JobScrapper {
 
     final static Logger logger = Logger.getLogger(JobScrapper.class);
 
-    static Properties properties = null;
+    private static EmailProperties emailProperties;
+    private static EmailSender emailSender;
 
 
-    public JobScrapper(Properties properties) {
-        this.properties = properties;
+    public JobScrapper(EmailProperties emailProperties,
+                       EmailSender emailSender) {
+        this.emailProperties = emailProperties;
+        this.emailSender = emailSender;
     }
 
-    public void scanForChanges() throws IOException {
+    void scanForChanges() throws IOException {
         logger.info("scanForChanges is bein run");
 
-        File file = new File(properties.getFilename());
+        File file = new File(emailProperties.getFilename());
         final WebClient client = configureClient();
         Collection<JobPosition> alreadySavedJobPostings = returnSavedJobPostings(file);
 
-        HtmlPage page = client.getPage(properties.getAddress());
+        HtmlPage page = client.getPage(emailProperties.getAddress());
         List<HtmlElement> jobPostings = (List<HtmlElement>) page.getByXPath("//div[@class='posting']");
-        EmailSender emailSender = new EmailSender(properties.getPassword());
 
         List<JobPosition> newJobPostings = jobPostings.stream()
                 .map(htmlElement -> makeJobPosting(htmlElement))
                 .filter(jobPosting -> !(alreadySavedJobPostings.contains(jobPosting)))
                 .collect(Collectors.toList());
 
-        newJobPostings.forEach(jobPosting -> emailSender.sendEmail(jobPosting));
+        newJobPostings.forEach(emailSender::sendEmail);
 
-        newJobPostings.forEach(jobPosting -> alreadySavedJobPostings.add(jobPosting));
+        alreadySavedJobPostings.addAll(newJobPostings);
 
         writeToJSON(file, alreadySavedJobPostings);
 
@@ -70,6 +72,7 @@ public class JobScrapper {
         jobPosition.setJobTitle(jobTitle.asText());
 
         logger.info("Returning job posting  -  "  + jobPosition.toString());
+
         return jobPosition;
     }
 
@@ -93,7 +96,7 @@ public class JobScrapper {
             ObjectMapper mapper = new ObjectMapper();
             List<JobPosition> JobPostingsSaved = mapper.readValue(json, new TypeReference<List<JobPosition>>() {
             });
-            JobPostingsSaved.forEach(jobPosition -> jobPositions.add(jobPosition));
+            jobPositions.addAll(JobPostingsSaved);
         }
         return jobPositions;
     }

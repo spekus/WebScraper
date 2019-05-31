@@ -17,14 +17,14 @@ public class ScheduledTasks {
     JobScrapper jobScrapper;
 
     @Scheduled(fixedRate = 1000000)
-    public void reportCurrentTime() {
+    void reportCurrentTime() {
 
         log.info("reportCurrentTime is running");
 
         try {
             jobScrapper.scanForChanges();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("reportCurrentTime() crashed while running jobScrapper.scanForChanges(), duo to IOException " + e);
         }
 
     }

@@ -2,9 +2,7 @@ spedlite:
   email:
     inbox-check-interval-millisec: 600000
     address: XXXXXXXX
+    sourceEmailAdress: XXXXXXXX
     password: XXXXXXXX
+    targetEmailAdress: XXXXXXXX
     filename: Job_Postings.json
-
-
-
-
