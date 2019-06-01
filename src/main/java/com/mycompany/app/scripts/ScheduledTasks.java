@@ -16,15 +16,15 @@ public class ScheduledTasks {
     @Autowired
     JobScrapper jobScrapper;
 
-    @Scheduled(fixedRate = 1000000)
+    @Scheduled(fixedDelayString = "${scraper.vinted.scraping-interval-millisec}")
     void reportCurrentTime() {
 
         log.info("reportCurrentTime is running");
 
         try {
-            jobScrapper.scanForChanges();
+            jobScrapper.checkForChanges();
         } catch (IOException e) {
-            log.error("reportCurrentTime() crashed while running jobScrapper.scanForChanges(), duo to IOException " + e);
+            log.error("reportCurrentTime() crashed while running jobScrapper.checkForChanges(), duo to IOException " + e);
         }
 
     }

@@ -1,7 +1,7 @@
 package com.mycompany.app.scripts;
 
-import com.mycompany.app.data.EmailProperties;
 import com.mycompany.app.data.JobPosition;
+import com.mycompany.app.data.ScraperProperties;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +16,13 @@ public class EmailSender {
 
     private final static org.apache.log4j.Logger logger = Logger.getLogger(EmailSender.class);
 
-    private EmailProperties properties;
+    private ScraperProperties properties;
 
-    public EmailSender(EmailProperties properties) {
+    public EmailSender(ScraperProperties properties) {
         this.properties = properties;
     }
 
-    public void sendEmail(JobPosition jobPosition) {
+    void sendEmail(JobPosition jobPosition) {
 
         logger.info("sendEmail is being run");
 
@@ -43,9 +43,7 @@ public class EmailSender {
         });
 
         try {
-
             MimeMessage msg = new MimeMessage(session);
-
             InternetAddress[] address = InternetAddress.parse(properties.getTargetEmailAddress(), true);
 
             msg.setRecipients(Message.RecipientType.TO, address);

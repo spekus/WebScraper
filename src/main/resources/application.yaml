@@ -1,8 +1,8 @@
-spedlite:
-  email:
-    inbox-check-interval-millisec: 600000
-    address: XXXXXXXX
-    sourceEmailAdress: XXXXXXXX
+scraper:
+  vinted:
+    scraping-interval-millisec: 1000000
+    address: https://jobs.lever.co/vinted/?team=Engineering
+    sourceEmailAddress: XXXXXXXX
     password: XXXXXXXX
-    targetEmailAdress: XXXXXXXX
+    targetEmailAddress: XXXXXXXX
     filename: Job_Postings.json

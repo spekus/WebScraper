@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties("spedlite.email")
-public class EmailProperties {
+@ConfigurationProperties("scraper.vinted")
+public class ScraperProperties {
 
     private String address;
     private String sourceEmailAddress;

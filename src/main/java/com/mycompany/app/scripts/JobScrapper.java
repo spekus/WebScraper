@@ -4,13 +4,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.mycompany.app.data.JobPosition;
-import com.mycompany.app.data.EmailProperties;
+import com.mycompany.app.data.ScraperProperties;
+import com.mycompany.app.scrapers.VintedWebScraper;
+import com.mycompany.app.scrapers.WebScraperForJobs;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -25,30 +23,40 @@ import java.util.stream.Collectors;
 @Service
 public class JobScrapper {
 
-    final static Logger logger = Logger.getLogger(JobScrapper.class);
+    private final static Logger logger = Logger.getLogger(JobScrapper.class);
 
-    private static EmailProperties emailProperties;
+    private static ScraperProperties scraperProperties;
     private static EmailSender emailSender;
+    private static WebScraperForJobs jobScrapper;
 
-
-    public JobScrapper(EmailProperties emailProperties,
-                       EmailSender emailSender) {
-        this.emailProperties = emailProperties;
-        this.emailSender = emailSender;
+    public JobScrapper(ScraperProperties scraperProperties,
+                       EmailSender emailSender,
+                       VintedWebScraper jobScrapper) {
+        JobScrapper.scraperProperties = scraperProperties;
+        JobScrapper.emailSender = emailSender;
+        JobScrapper.jobScrapper = jobScrapper;
     }
 
-    void scanForChanges() throws IOException {
-        logger.info("scanForChanges is bein run");
+    /**
+     * Method checks if there are any new open Job positions on Vinted compared to previous run.
+     * If there is some new data it send an email to email address specified in application.yaml
+     * after that it updates JSON file to include new data, so that during next scheduled run
+     * no emails are sent for the data which user already got email for.
+     * configuration for file name, password, emails, scrapping target page is held on application.yaml
+     *
+     * @throws IOException
+     */
 
-        File file = new File(emailProperties.getFilename());
-        final WebClient client = configureClient();
+    void checkForChanges() throws IOException {
+        logger.info("checkForChanges is being run");
+        File file = new File(scraperProperties.getFilename());
+
         Collection<JobPosition> alreadySavedJobPostings = returnSavedJobPostings(file);
 
-        HtmlPage page = client.getPage(emailProperties.getAddress());
-        List<HtmlElement> jobPostings = (List<HtmlElement>) page.getByXPath("//div[@class='posting']");
+        List<HtmlElement> jobPostingElements = jobScrapper.getHtmlElementsDescribingJobs();
 
-        List<JobPosition> newJobPostings = jobPostings.stream()
-                .map(htmlElement -> makeJobPosting(htmlElement))
+        List<JobPosition> newJobPostings = jobPostingElements.stream()
+                .map(htmlElement -> jobScrapper.makeJobPosting(htmlElement))
                 .filter(jobPosting -> !(alreadySavedJobPostings.contains(jobPosting)))
                 .collect(Collectors.toList());
 
@@ -57,40 +65,17 @@ public class JobScrapper {
         alreadySavedJobPostings.addAll(newJobPostings);
 
         writeToJSON(file, alreadySavedJobPostings);
-
     }
-
-    private JobPosition makeJobPosting(HtmlElement htmlElement) {
-        logger.info("Making job posting from htmlElement -  "  + htmlElement);
-
-        HtmlAnchor JobHyperLink = htmlElement.getFirstByXPath(".//div[@class='posting-apply']/a");
-        HtmlElement jobTitle = htmlElement.getFirstByXPath(".//a[@class='posting-title']/h5");
-
-        JobPosition jobPosition = new JobPosition();
-
-        jobPosition.setHyperLink(JobHyperLink.getHrefAttribute());
-        jobPosition.setJobTitle(jobTitle.asText());
-
-        logger.info("Returning job posting  -  "  + jobPosition.toString());
-
-        return jobPosition;
-    }
-
 
     private void writeToJSON(File file, Collection<JobPosition> currentPositions) throws IOException {
+        logger.info("writeToJSON is being run");
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
         writer.writeValue(file, currentPositions);
     }
 
-    private WebClient configureClient() {
-        WebClient client = new WebClient(BrowserVersion.FIREFOX_38);
-        client.getOptions().setCssEnabled(false);
-        client.getOptions().setJavaScriptEnabled(false);
-        return client;
-    }
-
     private Collection<JobPosition> returnSavedJobPostings(File json) throws IOException {
+        logger.info("returnSavedJobPostings is being run");
         Collection<JobPosition> jobPositions = new HashSet<>();
         if (json.exists()) {
             ObjectMapper mapper = new ObjectMapper();
